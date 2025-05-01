@@ -24,27 +24,105 @@ sales_data = [
 
 def total_sales_by_product(data, product_key):
     """Calculates the total sales of a specific product in 30 days."""
-    pass
+    total_sales = sum(d[product_key]for d in data)
+    return total_sales
 
 
 def average_daily_sales(data, product_key):
     """Calculates the average daily sales of a specific product."""
-    pass
+    total_sales = sum(d[product_key] for d in data)
+    num_days = len(data)
+    return total_sales / num_days if num_days > 0 else 0
+
 
 
 def best_selling_day(data):
     """Finds the day with the highest total sales."""
-    pass
+    max_day = max(data,key=lambda d: d["product_a"] + d["product_b"] + d["product_c"])
+    total = max_day["product_a"] + max_day["product_b"] + max_day["product_c"]
+    return max_day["day"], total
 
 
 def days_above_threshold(data, product_key, threshold):
     """Counts how many days the sales of a product exceeded a given threshold."""
-    pass
+    return sum(1 for d in data if d[product_key] > threshold)
+
 
 
 def top_product(data):
     """Determines which product had the highest total sales in 30 days."""
-    pass
+    # Calculamos las ventas totales de cada producto
+
+    total_sales_a = sum(d["product_a"] for d in data)
+    total_sales_b = sum(d["product_b"] for d in data)
+    total_sales_c = sum(d["product_c"] for d in data)
+
+    # Comparamos precios de con condicionales
+    if total_sales_a >= total_sales_b and total_sales_a >= total_sales_c:
+        return "product_a", total_sales_a
+    elif total_sales_b >= total_sales_a and total_sales_b >= total_sales_c:
+        return "product_b", total_sales_b
+    else:
+        return "product_c", total_sales_c
+    
+def worst_selling_day(data):
+    """Finds the day with the lowest total sales"""
+    min_day = data[0]
+    min_total = min_day["product_a"] + min_day["product_b"] + min_day["product_c"]
+
+    for d in data[1:]:
+        total = d["product_a"] + d["product_b"] + d["product_c"]
+        if total < min_total:
+            min_day = d
+            min_total = total
+
+    return min_day["day"], min_total
+
+def top_3_selling_days(data):
+    """Returns the top 3 days with the highest total sales"""
+    #Agregamos total de ventas por dia
+    sorted_days = sorted(data, key=lambda d: d["product_a"] + d["product_b"] + d["product_c"], reverse=True)
+
+    #Tomamos los 3 primeros
+    top_3 = sorted_days[:3]
+
+    #Extraemos dia y total de ventas
+    return [(d["day"], d["product_a"] + d["product_b"] + d["product_c"]) for d in top_3]
+
+def sales_range(data, product_key):
+    """Calculates the range (max - min) of sales for a given product."""
+    sales = [d[product_key] for d in data]
+    return max(sales) - min(sales)
+
+#Ejemplos de uso
+# El producto con las ventas totales mas altas es
+producto, ventas_totales = top_product(sales_data)
+print(f"El producto con las ventas totales más altas es {producto} con {ventas_totales} ventas.")
+# Calculando las ventas totales de 'product_a'
+ventas_totales_product_a = total_sales_by_product(sales_data, "product_a")
+print("Ventas totales de product_a en 20 días:", ventas_totales_product_a)
+#Calculamos el promedio
+promedio_product_a = average_daily_sales(sales_data, "product_a")
+print("Promedio diario de ventas de product_a:", promedio_product_a)
+#Calculamos eldia con mas ventas totales
+dia, total = best_selling_day(sales_data)
+print(f"El día con más ventas totales fue el día {dia} con un total de {total} ventas.")
+# Dado dichos dias que un producto supera el umbral
+umbral = 200
+dias_superaron_umbral_product_a = days_above_threshold(sales_data, "product_a", umbral)
+print(f"Días en los que las ventas de product_a superaron {umbral}:", dias_superaron_umbral_product_a)
+#Calculamos las peores ventas
+dia_peor, ventas_peor = worst_selling_day(sales_data)
+print(f"El dia con las peores ventas fue el dia {dia_peor} con un total de {ventas_peor} ventas")
+#Ponemos por pantalla el resultado de los 3 primeros
+mejores_dias = top_3_selling_days(sales_data)
+print("Top 3 días con mayores ventas totales:")
+for dia, total in mejores_dias:
+    print(f"Día {dia} con {total} ventas.")
+#Calculamos el maximo y minimo de las ventas
+rango_product_a = sales_range(sales_data, "product_a")
+print(f"Rango de ventan para product_a:{rango_product_a}")
+
 
 
 
