@@ -46,7 +46,7 @@ def top_product(data):
     """Determines which product had the highest total sales in 30 days."""
     pass
 
-
+MODIFICACIONES
 
 # Function tests
 print("Total sales of product_a:", total_sales_by_product(sales_data, "product_a"))
