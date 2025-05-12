@@ -22,34 +22,68 @@ sales_data = [
     {"day": 20, "product_a": 210, "product_b": 57, "product_c": 324}
 ]
 
+#opcion 1 
 def total_sales_by_product(data, product_key):
     """Calculates the total sales of a specific product in 30 days."""
-    pass
+    total = 0
+    for x in data:
+        total += x[product_key]
+    return total
 
+#opcion 2
+#def total_sales_by_product(data, prodcut_key):
+    #return sum(x[product_key for x in data])    
 
 def average_daily_sales(data, product_key):
     """Calculates the average daily sales of a specific product."""
-    pass
-
+    total = total_sales_by_product(data, product_key)
+    return total / len(data)
+# opcion 2
+# def average_daily_sales(data, product_key):
+    return sum(x[product_key] for x in data) / len(data)
 
 def best_selling_day(data):
     """Finds the day with the highest total sales."""
-    pass
+    max_day = None
+    max_sales = 0
+    for x in data:
+        total = x["product_a"] + x["product_b"] + x["product_c"]
+        if total > max_sales:
+            max_sales = total
+            max_day = x["day"]
+    return max_day
+# opcion 2 usando max y key
+#def best_selling_day(data):
+    #best_day = max(data, key=lambda x: x["product_a"] + x["product_b"] + x["product_c"])
+    #return best day["day"]
 
 
 def days_above_threshold(data, product_key, threshold):
     """Counts how many days the sales of a product exceeded a given threshold."""
-    pass
+    count = 0
+    for entry in data:
+        if entry[product_key] > threshold:
+            count += 1
+    return count
+# opcion 2 
+#def days_above_threshold(data, product_key, threshold):
+#    return sum(1 for entry in data if entry[product_key] > threshold)
 
 
 def top_product(data):
     """Determines which product had the highest total sales in 30 days."""
-    pass
+    products = ["product_a", "product_b", "product_c"]
+    totals = {product: total_sales_by_product(data, product) for product in products}
+    return max(totals, key=totals.get)
 
-MODIFICACIONES
+# opcion 2 
+#def top_product(data):
+    #return max(["product_a", "product_b", "product_c"], key=lambda p: sum(entry[p] for entry in data))
+
+
 
 # Function tests
-print("Total sales of product_a:", total_sales_by_product(sales_data, "product_a"))
+print("Total sales of product_a:", total_sales_by_product(sales_data, "product_b"))
 print("Average daily sales of product_b:", average_daily_sales(sales_data, "product_b"))
 print("Day with highest total sales:", best_selling_day(sales_data))
 print("Days when product_c exceeded 300 sales:", days_above_threshold(sales_data, "product_c", 300))
